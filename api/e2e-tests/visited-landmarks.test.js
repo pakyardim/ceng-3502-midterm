@@ -11,7 +11,7 @@ describe("Visited Landmarks", () => {
   });
 
   it("should return all visited landmarks", async () => {
-    const response = await request(app).get("/visited").expect(200);
+    const response = await request(app).get("/api/visited").expect(200);
 
     jest.spyOn(fs, "readFileSync").mockImplementation(() => {
       return JSON.stringify([
@@ -80,7 +80,7 @@ describe("Visited Landmarks", () => {
     };
 
     const response = await request(app)
-      .post("/visited")
+      .post("/api/visited")
       .send(newVisitedLandmark)
       .expect(201);
 
@@ -121,7 +121,7 @@ describe("Visited Landmarks", () => {
     };
 
     const response = await request(app)
-      .post("/visited")
+      .post("/api/visited")
       .send(newVisitedLandmark)
       .expect(404);
 
@@ -165,7 +165,7 @@ describe("Visited Landmarks", () => {
         ])
       );
 
-    const response = await request(app).get("/visited/1").expect(200);
+    const response = await request(app).get("/api/visited/1").expect(200);
 
     expect(response.body).toBeInstanceOf(Array);
     expect(response.body.length).toBe(2);
@@ -180,7 +180,7 @@ describe("Visited Landmarks", () => {
   });
 
   it("should return 404 for non-existent landmark ID", async () => {
-    const response = await request(app).get("/visited/999").expect(404);
+    const response = await request(app).get("/api/visited/999").expect(404);
 
     expect(response.body).toEqual({
       error: "Landmark not found",

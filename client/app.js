@@ -17,6 +17,7 @@ landmarkForm.addEventListener("submit", async (e) => {
     .getElementById("landmarkDescription")
     .value.trim();
   const category = document.getElementById("landmarkCategory").value;
+  const notes = document.getElementById("landmarkNotes").value.trim();
 
   const landmark = {
     name,
@@ -26,6 +27,7 @@ landmarkForm.addEventListener("submit", async (e) => {
       latitude: selectedLocation.lat,
       longitude: selectedLocation.lng,
     },
+    notes,
   };
 
   const response = await sendLandmark(landmark);

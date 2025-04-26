@@ -19,6 +19,7 @@ describe("Landmarks", () => {
             longitude: -74.0445,
           },
           category: "Monument",
+          notes: "Visited in 2020",
         },
         {
           id: 2,
@@ -30,6 +31,7 @@ describe("Landmarks", () => {
             longitude: 116.5704,
           },
           category: "Historical",
+          notes: "Visited in 2019",
         },
       ]);
     });
@@ -38,7 +40,7 @@ describe("Landmarks", () => {
   });
 
   it("should return all landmarks", async () => {
-    const response = await request(app).get("/landmarks").expect(200);
+    const response = await request(app).get("/api/landmarks").expect(200);
 
     expect(response.body).toBeInstanceOf(Array);
     expect(response.body.length).toBeGreaterThan(0);
@@ -52,6 +54,7 @@ describe("Landmarks", () => {
           longitude: expect.any(Number),
         },
         category: expect.any(String),
+        notes: expect.any(String),
       })
     );
   });
@@ -66,10 +69,11 @@ describe("Landmarks", () => {
         longitude: 2.2945,
       },
       category: "Monument",
+      notes: "Visited in 2021",
     };
 
     const response = await request(app)
-      .post("/landmarks")
+      .post("/api/landmarks")
       .send(newLandmark)
       .expect(201);
 
@@ -78,7 +82,7 @@ describe("Landmarks", () => {
   });
 
   it("should return a landmark by ID", async () => {
-    const response = await request(app).get("/landmarks/1").expect(200);
+    const response = await request(app).get("/api/landmarks/1").expect(200);
 
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -91,6 +95,7 @@ describe("Landmarks", () => {
           longitude: -74.0445,
         },
         category: "Monument",
+        notes: "Visited in 2020",
       })
     );
   });
@@ -104,10 +109,11 @@ describe("Landmarks", () => {
         longitude: 10.3966,
       },
       category: "Monument",
+      notes: "Visited in 2022",
     };
 
     const response = await request(app)
-      .put("/landmarks/1")
+      .put("/api/landmarks/1")
       .send(updatedLandmark)
       .expect(200);
 
@@ -122,12 +128,13 @@ describe("Landmarks", () => {
           longitude: 10.3966,
         },
         category: "Monument",
+        notes: "Visited in 2022",
       })
     );
   });
 
   it("should delete a landmark", async () => {
-    const response = await request(app).delete("/landmarks/1").expect(200);
+    const response = await request(app).delete("/api/landmarks/1").expect(200);
 
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -137,7 +144,7 @@ describe("Landmarks", () => {
   });
 
   it("should return 404 for a non-existent landmark", async () => {
-    const response = await request(app).get("/landmarks/999").expect(404);
+    const response = await request(app).get("/api/landmarks/999").expect(404);
 
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -154,7 +161,7 @@ describe("Landmarks", () => {
     };
 
     const response = await request(app)
-      .post("/landmarks")
+      .post("/api/landmarks")
       .send(invalidLandmark)
       .expect(400);
 
@@ -170,6 +177,6 @@ describe("Landmarks", () => {
       throw new Error("Server error");
     });
 
-    await request(app).get("/landmarks").expect(500);
+    await request(app).get("/api/landmarks").expect(500);
   });
 });

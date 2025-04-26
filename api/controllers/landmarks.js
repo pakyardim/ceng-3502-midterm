@@ -14,7 +14,7 @@ exports.getLandmarks = (req, res) => {
 };
 
 exports.addLandmark = (req, res) => {
-  const { name, description, location, category } = req.body;
+  const { name, description, location, category, notes } = req.body;
 
   if (!name || !description || !location || !category) {
     return res.status(400).json({ error: "Invalid landmark data" });
@@ -34,6 +34,7 @@ exports.addLandmark = (req, res) => {
         longitude: +location.longitude,
       },
       category,
+      notes: notes || "",
     };
 
     landmarks.push(newLandmark);
@@ -66,7 +67,7 @@ exports.getLandmark = (req, res) => {
 
 exports.updateLandmark = (req, res) => {
   const { id } = req.params;
-  const { name, description, location, category } = req.body;
+  const { name, description, location, category, notes } = req.body;
 
   if (!name || !description || !location || !category) {
     return res.status(400).json({ error: "Invalid landmark data" });
@@ -88,6 +89,7 @@ exports.updateLandmark = (req, res) => {
       description,
       location,
       category,
+      notes,
     };
 
     landmarks[landmarkIndex] = updatedLandmark;
