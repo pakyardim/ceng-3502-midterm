@@ -98,7 +98,6 @@ function updateLandmarkList() {
   let list = document.getElementById("landmarkList");
   list.innerHTML = "";
   landmarks.forEach((landmark, index) => {
-    console.log(landmark);
     let li = document.createElement("li");
     li.textContent = `Landmark ${index + 1}: Lat ${
       landmark.location.latitude

@@ -24,8 +24,6 @@ exports.getLandmarks = (req, res) => {
       };
     });
 
-    console.log(visitedLandmarkIds);
-
     res.status(200).json(landmarksWithVisitedStatus);
   } catch (error) {
     console.error("Error reading landmarks file:", error);
