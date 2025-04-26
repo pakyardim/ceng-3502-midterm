@@ -33,6 +33,8 @@ describe("Landmarks", () => {
         },
       ]);
     });
+
+    jest.spyOn(fs, "writeFileSync").mockImplementation(() => {});
   });
 
   it("should return all landmarks", async () => {
