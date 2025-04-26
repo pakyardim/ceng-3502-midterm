@@ -1,0 +1,12 @@
+[
+  {
+    "id": 2,
+    "name": "Great Wall of China",
+    "description": "A series of fortifications that stretch across northern China.",
+    "location": {
+      "latitude": 40.4319,
+      "longitude": 116.5704
+    },
+    "category": "Historical"
+  }
+]

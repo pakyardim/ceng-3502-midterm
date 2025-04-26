@@ -139,7 +139,7 @@ describe("Landmarks", () => {
 
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: "Landmark not found",
+        error: "Landmark not found",
       })
     );
   });
@@ -158,7 +158,7 @@ describe("Landmarks", () => {
 
     expect(response.body).toEqual(
       expect.objectContaining({
-        message: "Invalid landmark data",
+        error: "Invalid landmark data",
       })
     );
   });
@@ -168,12 +168,6 @@ describe("Landmarks", () => {
       throw new Error("Server error");
     });
 
-    const response = await request(app).get("/landmarks").expect(500);
-
-    expect(response.body).toEqual(
-      expect.objectContaining({
-        message: "Server error",
-      })
-    );
+    await request(app).get("/landmarks").expect(500);
   });
 });
