@@ -1,54 +1,104 @@
 const API_URL = "http://localhost:5000/api/landmarks";
 
+let marker = null;
+let map = null;
+let selectedLocation = null;
+
+const landmarkList = document.getElementById("landmarkList");
+const landmarkForm = document.getElementById("landmarkForm");
+const locationText = document.getElementById("locationText");
+const addLandmarkButton = document.getElementById("addLandmarkButton");
+
+landmarkForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("landmarkName").value.trim();
+  const description = document
+    .getElementById("landmarkDescription")
+    .value.trim();
+  const category = document.getElementById("landmarkCategory").value;
+
+  const landmark = {
+    name,
+    description,
+    category,
+    location: {
+      latitude: selectedLocation.lat,
+      longitude: selectedLocation.lng,
+    },
+  };
+
+  const response = await sendLandmark(landmark);
+
+  if (response) {
+    alert("Landmark added successfully!");
+
+    marker = null;
+    addLandmarkButton.disabled = true;
+    selectedLocation = null;
+    landmarkForm.reset();
+    locationText.textContent = "Location:";
+  }
+});
+
 async function fetchLandmarks() {
   try {
     const response = await fetch(API_URL);
     return await response.json();
   } catch (error) {
-    console.error("Error fetching landmarks:", error);
+    alert("Error fetching landmarks! ", error);
   }
 }
 
-function updateLandmarkList(landmarks) {
-  let list = document.getElementById("landmarkList");
-  list.innerHTML = "";
-  landmarks.forEach((point, index) => {
-    let li = document.createElement("li");
-    li.textContent = `Landmark ${index + 1}: Lat ${point.latitude}, Lng ${
-      point.longitude
-    }`;
-    list.appendChild(li);
-  });
+async function sendLandmark(landmark) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(landmark),
+    });
+
+    const jsonResponse = await response.json();
+
+    if (jsonResponse.error) {
+      return alert(`Error adding landmark! ${jsonResponse.error}`);
+    }
+
+    return jsonResponse;
+  } catch (error) {
+    alert("Error! ", error);
+  }
 }
 
 async function init() {
-  const map = L.map("map").setView([20, 0], 2);
+  map = L.map("map").setView([20, 0], 2);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "&copy; OpenStreetMap contributors",
   }).addTo(map);
 
-  let landmarks = [];
-
   map.on("click", function (e) {
-    var lat = e.latlng.lat.toFixed(6);
-    var lng = e.latlng.lng.toFixed(6);
+    const lat = e.latlng.lat.toFixed(6);
+    const lng = e.latlng.lng.toFixed(6);
 
-    L.marker([lat, lng])
+    selectedLocation = { lat, lng };
+
+    if (marker) map.removeLayer(marker);
+
+    marker = L.marker([lat, lng])
       .addTo(map)
       .bindPopup(`Lat: ${lat}, Lng: ${lng}`)
       .openPopup();
 
-    landmarks.push({ latitude: lat, longitude: lng });
-    updateLandmarkList(landmarks);
+    locationText.textContent = `Lat: ${lat}, Lng: ${lng}`;
+    addLandmarkButton.disabled = false;
   });
 
   const response = await fetchLandmarks(map);
 
   if (response) {
-    landmarks.push(...response.map((landmark) => landmark.location));
-    updateLandmarkList(landmarks);
-
     response.forEach((landmark) => {
       const lat = landmark.location.latitude.toFixed(6);
       const lng = landmark.location.longitude.toFixed(6);

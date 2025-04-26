@@ -14,6 +14,25 @@
     <h2>Click on the Map to Add Landmarks</h2>
     <div id="map"></div>
 
+    <form id="landmarkForm">
+      <h3>Add New Landmark</h3>
+      <label for="landmarkName">Landmark Name:</label>
+      <input type="text" id="landmarkName" required />
+      <label for="landmarkDescription">Description:</label>
+      <input type="text" id="landmarkDescription" required />
+      <label for="landmarkCategory">Category:</label>
+      <select id="landmarkCategory">
+        <option value="historical">Historical</option>
+        <option value="natural">Natural</option>
+        <option value="cultural">Cultural</option>
+        <option value="other">Other</option>
+      </select>
+      <p id="locationText">Location:</p>
+      <button type="submit" id="addLandmarkButton" disabled>
+        Add Landmark
+      </button>
+    </form>
+
     <h3>Selected Landmarks</h3>
     <ul id="landmarkList"></ul>
 

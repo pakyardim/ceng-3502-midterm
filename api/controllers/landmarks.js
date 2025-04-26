@@ -23,12 +23,16 @@ exports.addLandmark = (req, res) => {
   try {
     const dataFilePath = path.join(__dirname, "../data/landmarks.json");
     const landmarks = JSON.parse(fs.readFileSync(dataFilePath, "utf8"));
+    const id = landmarks.length ? landmarks[landmarks.length - 1].id + 1 : 1;
 
     const newLandmark = {
-      id: landmarks.length + 1,
+      id,
       name,
       description,
-      location,
+      location: {
+        latitude: +location.latitude,
+        longitude: +location.longitude,
+      },
       category,
     };
 
@@ -36,7 +40,6 @@ exports.addLandmark = (req, res) => {
     fs.writeFileSync(dataFilePath, JSON.stringify(landmarks, null, 2));
     res.status(201).json(newLandmark);
   } catch (error) {
-    console.error("Error writing to landmarks file:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
