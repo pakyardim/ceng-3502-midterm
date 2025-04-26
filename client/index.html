@@ -38,9 +38,28 @@
     <h3>Selected Landmarks</h3>
     <ul id="landmarkList"></ul>
 
-    <button>Add Notes</button>
-    <button>Visited Landmarks</button>
-    <button>Create Visiting Plans</button>
+    <button id="visitedLandmarksBtn">Visited Landmarks</button>
+
+    <div id="markVisitedModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeMarkVisitedModal">&times;</span>
+        <form id="markVisitedForm">
+          <h3 id="visitedFormTitle"></h3>
+          <label for="visitorName">Visitor Name:</label>
+          <input type="text" id="visitorName" required />
+          <label for="visitedDate">Visited Date:</label>
+          <input type="date" id="visitedDate" required />
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="visitedLandmarksModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeVisitedLandmarksModal">&times;</span>
+        <ul id="visitedLandmarksList"></ul>
+      </div>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="app.js"></script>

@@ -4,9 +4,29 @@ const path = require("path");
 exports.getLandmarks = (req, res) => {
   try {
     const dataFilePath = path.join(__dirname, "../data/landmarks.json");
-
     const landmarks = JSON.parse(fs.readFileSync(dataFilePath, "utf8"));
-    res.status(200).json(landmarks);
+
+    const visitedLanDmarkFilePath = path.join(
+      __dirname,
+      "../data/visited-landmarks.json"
+    );
+
+    const visitedLandmarks = JSON.parse(
+      fs.readFileSync(visitedLanDmarkFilePath, "utf8")
+    );
+
+    const visitedLandmarkIds = visitedLandmarks.map((lm) => lm.id);
+
+    const landmarksWithVisitedStatus = landmarks.map((landmark) => {
+      return {
+        ...landmark,
+        visited: visitedLandmarkIds.includes(landmark.id),
+      };
+    });
+
+    console.log(visitedLandmarkIds);
+
+    res.status(200).json(landmarksWithVisitedStatus);
   } catch (error) {
     console.error("Error reading landmarks file:", error);
     res.status(500).json({ error: "Internal Server Error" });

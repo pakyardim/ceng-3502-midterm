@@ -3,43 +3,57 @@ const fs = require("fs");
 
 const app = require("../server.js");
 
+const mockLandmarks = [
+  {
+    id: 1,
+    name: "Statue of Liberty",
+    description:
+      "A colossal neoclassical sculpture on Liberty Island in New York City.",
+    location: {
+      latitude: 40.6892,
+      longitude: -74.0445,
+    },
+    category: "Monument",
+    notes: "Visited in 2020",
+  },
+  {
+    id: 2,
+    name: "Great Wall of China",
+    description:
+      "A series of fortifications that stretch across northern China.",
+    location: {
+      latitude: 40.4319,
+      longitude: 116.5704,
+    },
+    category: "Historical",
+    notes: "Visited in 2019",
+  },
+];
+
 describe("Landmarks", () => {
   beforeEach(() => {
     jest.restoreAllMocks();
-
-    jest.spyOn(fs, "readFileSync").mockImplementation(() => {
-      return JSON.stringify([
-        {
-          id: 1,
-          name: "Statue of Liberty",
-          description:
-            "A colossal neoclassical sculpture on Liberty Island in New York City.",
-          location: {
-            latitude: 40.6892,
-            longitude: -74.0445,
-          },
-          category: "Monument",
-          notes: "Visited in 2020",
-        },
-        {
-          id: 2,
-          name: "Great Wall of China",
-          description:
-            "A series of fortifications that stretch across northern China.",
-          location: {
-            latitude: 40.4319,
-            longitude: 116.5704,
-          },
-          category: "Historical",
-          notes: "Visited in 2019",
-        },
-      ]);
-    });
 
     jest.spyOn(fs, "writeFileSync").mockImplementation(() => {});
   });
 
   it("should return all landmarks", async () => {
+    jest
+      .spyOn(fs, "readFileSync")
+      .mockImplementationOnce(() => {
+        return JSON.stringify(mockLandmarks);
+      })
+      .mockImplementationOnce(() => {
+        return JSON.stringify([
+          {
+            id: 1,
+            landmark_id: 1,
+            visited_date: "2023-10-01",
+            visitor_name: "John Doe",
+          },
+        ]);
+      });
+
     const response = await request(app).get("/api/landmarks").expect(200);
 
     expect(response.body).toBeInstanceOf(Array);
@@ -55,6 +69,7 @@ describe("Landmarks", () => {
         },
         category: expect.any(String),
         notes: expect.any(String),
+        visited: expect.any(Boolean),
       })
     );
   });
@@ -82,6 +97,10 @@ describe("Landmarks", () => {
   });
 
   it("should return a landmark by ID", async () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+      return JSON.stringify(mockLandmarks);
+    });
+
     const response = await request(app).get("/api/landmarks/1").expect(200);
 
     expect(response.body).toEqual(
@@ -101,6 +120,10 @@ describe("Landmarks", () => {
   });
 
   it("should update a landmark", async () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+      return JSON.stringify(mockLandmarks);
+    });
+
     const updatedLandmark = {
       name: "Tower of Pisa",
       description: "A freestanding bell tower, known for its unintended tilt.",
@@ -134,6 +157,9 @@ describe("Landmarks", () => {
   });
 
   it("should delete a landmark", async () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+      return JSON.stringify(mockLandmarks);
+    });
     const response = await request(app).delete("/api/landmarks/1").expect(200);
 
     expect(response.body).toEqual(
@@ -144,6 +170,9 @@ describe("Landmarks", () => {
   });
 
   it("should return 404 for a non-existent landmark", async () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+      return JSON.stringify(mockLandmarks);
+    });
     const response = await request(app).get("/api/landmarks/999").expect(404);
 
     expect(response.body).toEqual(
@@ -154,6 +183,9 @@ describe("Landmarks", () => {
   });
 
   it("should return 400 for invalid landmark data", async () => {
+    jest.spyOn(fs, "readFileSync").mockImplementationOnce(() => {
+      return JSON.stringify(mockLandmarks);
+    });
     const invalidLandmark = {
       name: "Invalid Landmark",
       description: "This landmark has no location.",

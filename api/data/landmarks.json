@@ -9,5 +9,38 @@
     },
     "category": "Historical",
     "notes": ""
+  },
+  {
+    "id": 3,
+    "name": "Landmark #1 (37.010915, 28.418884)",
+    "description": "sdgdsg",
+    "location": {
+      "latitude": 36.995268,
+      "longitude": 28.398886
+    },
+    "category": "historical",
+    "notes": "sdgsdgsdg"
+  },
+  {
+    "id": 4,
+    "name": "sdgsdg",
+    "description": "sdgsdg",
+    "location": {
+      "latitude": 27.587884,
+      "longitude": 19.68976
+    },
+    "category": "historical",
+    "notes": "dsgsdg"
+  },
+  {
+    "id": 5,
+    "name": "sdgsdgds",
+    "description": "sdgsdg",
+    "location": {
+      "latitude": 38.300644,
+      "longitude": 44.332851
+    },
+    "category": "historical",
+    "notes": "sdggsdgd"
   }
 ]
